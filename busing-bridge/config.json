@@ -1,6 +1,6 @@
 {
     "name": "Busing <-> MQTT bridge",
-    "version": "0.0.19-beta-1",
+    "version": "0.0.19-beta-2",
     "slug": "ingenium_busing_mqtt",
     "description": "Publish Ingenium/Fermax Events into MQTT",
     "arch": [
@@ -13,6 +13,7 @@
     "startup": "services",
     "boot": "auto",
     "url": "https://github.com/GermanDZ/home-assistant-addons/tree/main/busing-bridge",
+    "stage": "experimental",
     "services": ["mqtt:need"],
     "options": {
         "bridge_enabled": true,
