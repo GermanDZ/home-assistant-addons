@@ -11,4 +11,4 @@ This repository contains my peronal, but free to use [Home Assistant Add-ons](ht
 
 ## Add-ons
 
-* [Busing Bridge (Ferman/Ingenium)](busing/README.md)
+* [Busing Bridge (Fermax/Ingenium)](busing-bridge/README.md)
