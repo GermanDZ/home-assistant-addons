@@ -5,7 +5,6 @@ require "json"
 require "mqtt"
 require_relative "packet"
 require_relative "busing"
-require "pry"
 
 options_path = ENV.fetch("OPTIONS_FILE", "/data/options.json")
 options = JSON.parse(File.read(options_path))
@@ -70,16 +69,6 @@ busing_entities.each do |entity|
   publish_entity_state(mqtt, logger, entity, state) if bridge_enabled
   logger.info("Busing #{entity} are '#{state}'")  
 end
-
-puts busing.input_state_by(name: "e1")
-puts busing.input_state_by(name: "e2")
-puts busing.input_state_by(name: "e3")
-puts busing.input_state_by(name: "e4")
-
-puts busing.output_state_by(name: "z1")
-puts busing.output_state_by(name: "z2")
-puts busing.output_state_by(name: "z4")
-pry
 
 WAITING_TIME_FOR_MQTT = 0.1
 
