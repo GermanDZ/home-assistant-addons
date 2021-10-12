@@ -5,11 +5,11 @@ if ! bashio::services.available "mqtt"; then
     exit -1
 else
     bashio::log.info "MQTT service found, fetching server detail ..."
-    MQTT_HOST=$(bashio::services mqtt "host")
-    MQTT_PORT=$(bashio::services mqtt "port")
-    MQTT_SSL=$(bashio::services mqtt "ssl")
-    MQTT_USERNAME=$(bashio::services mqtt "username")
-    MQTT_PASSWORD=$(bashio::services mqtt "password")
+    export MQTT_HOST=$(bashio::services mqtt "host")
+    export MQTT_PORT=$(bashio::services mqtt "port")
+    export MQTT_SSL=$(bashio::services mqtt "ssl")
+    export MQTT_USERNAME=$(bashio::services mqtt "username")
+    export MQTT_PASSWORD=$(bashio::services mqtt "password")
     bashio::log.info "Received user: '$MQTT_USERNAME' for MQTT at '$MQTT_HOST:$MQTT_PORT'!"
 fi
 
