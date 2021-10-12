@@ -12,6 +12,7 @@
     ],
     "startup": "services",
     "boot": "auto",
+    "url": "https://github.com/GermanDZ/home-assistant-addons/tree/main/busing-bridge",
     "options": {
         "bridge_enabled": true,
         "forward_all_events": false,
