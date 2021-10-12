@@ -13,39 +13,46 @@
     "startup": "services",
     "boot": "auto",
     "options": {
-      "bridge_enabled": true,
-      "forward_all_events": false,
-      "busing_host": null,
-      "busing_port": 12347,
-      "busing_entities": [],
-      "busing_devices_installed": 5,
-      "busing_device_configuration": [],
-      "mqtt_host": null,
-      "mqtt_port": 8833,
-      "mqtt_ssl": true,
-      "mqtt_protocol": "mqtts",
-      "mqtt_username": null,
-      "mqtt_password": null,
-      "mqtt_topic": "busing/events/",
-      "log_level": "info"
+        "bridge_enabled": true,
+        "forward_all_events": false,
+        "busing_host": null,
+        "busing_port": 12347,
+        "busing_entities": [],
+        "busing_devices_installed": 5,
+        "busing_device_configuration": [],
+        "mqtt_host": null,
+        "mqtt_port": 8833,
+        "mqtt_ssl": true,
+        "mqtt_protocol": "mqtts",
+        "mqtt_username": null,
+        "mqtt_password": null,
+        "mqtt_topic": "busing/events/",
+        "log_level": "info"
     },
     "schema": {
-      "bridge_enabled": "bool?",
-      "forward_all_events": "bool?",
-      "busing_host": "str",
-      "busing_port": "int?",
-      "busing_entities": ["str"],
-      "busing_devices_installed": "int",
-      "busing_device_configuration": [
-        { "type": "str", "outputs": ["str"] }
-      ],
-      "mqtt_host": "str",
-      "mqtt_port": "int",
-      "mqtt_ssl": "bool",
-      "mqtt_protocol": "str",
-      "mqtt_username": "str",
-      "mqtt_password": "str",
-      "mqtt_topic": "str",
-      "log_level": "str"
+        "bridge_enabled": "bool?",
+        "forward_all_events": "bool?",
+        "busing_host": "str",
+        "busing_port": "int?",
+        "busing_entities": [
+            "str"
+        ],
+        "busing_devices_installed": "int",
+        "busing_device_configuration": [
+            {
+                "type": "str",
+                "outputs": [
+                    "str"
+                ]
+            }
+        ],
+        "mqtt_host": "str",
+        "mqtt_port": "int",
+        "mqtt_ssl": "bool",
+        "mqtt_protocol": "str",
+        "mqtt_username": "str",
+        "mqtt_password": "str",
+        "mqtt_topic": "str",
+        "log_level": "str"
     }
 }
