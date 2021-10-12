@@ -17,12 +17,18 @@ busing_device_configurations = options.fetch("busing_device_configuration")
 devices_installed = options.fetch("busing_devices_installed", 12)
 forward_all_events = options.fetch("forward_all_events", false)
 
-mqtt_host = options.fetch("mqtt_host")
-mqtt_port = options.fetch("mqtt_port", 8883)
-mqtt_ssl = options.fetch("mqtt_ssl", true)
-mqtt_protocol = options.fetch("mqtt_protocol", "mqtts")
-mqtt_username = options.fetch("mqtt_username")
-mqtt_password = options.fetch("mqtt_password")
+puts "==="*20
+puts ENV.inspect
+puts "==="*20
+mqtt_options = ENV.fetch("MQTT_HOST", false) ? ENV : options.fetch("mqtt_config")
+
+mqtt_host = mqtt_options.fetch("MQTT_HOST")
+mqtt_port = mqtt_options.fetch("MQTT_PORT")
+mqtt_ssl = mqtt_options.fetch("MQTT_SSL", true)
+mqtt_username = mqtt_options.fetch("MQTT_USERNAME")
+mqtt_password = mqtt_options.fetch("MQTT_PASSWORD")
+mqtt_protocol = mqtt_ssl ? "mqtts" : "mqtt"
+
 mqtt_topic = options.fetch("mqtt_topic", "busing/events")
 
 log_level = options.fetch("log_level", Logger::WARN)
