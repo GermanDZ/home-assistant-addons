@@ -64,8 +64,6 @@ busing_entities.each do |entity|
   logger.info("Busing #{entity} are '#{state}'")  
 end
 
-WAITING_TIME_FOR_MQTT = 0.1
-
 def do_other_things(mqtt, logger)
   logger.debug("No busing events")
   Timeout::timeout(WAITING_TIME_FOR_MQTT) do
@@ -87,6 +85,8 @@ busing_device_configurations.each do |options|
     inputs: options["inputs"]
   )
 end
+
+WAITING_TIME_FOR_MQTT = 0.1
 
 busing.listen do |busing_event|
   if busing_event == :no_event
