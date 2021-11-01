@@ -16,6 +16,7 @@ busing_entities = options.fetch("busing_entities")
 busing_device_configurations = options.fetch("busing_device_configuration")
 devices_installed = options.fetch("busing_devices_installed", 12)
 forward_all_events = options.fetch("forward_all_events", false)
+full_resync_every = options.fetch("full_resync_every", 60)# seconds
 
 mqtt_options = ENV.fetch("MQTT_HOST", false) ? ENV : options.fetch("mqtt_config")
 
@@ -92,8 +93,16 @@ full_resync(busing_entities, busing: busing, mqtt: mqtt, logger: logger, bridge_
 
 WAITING_TIME_FOR_MQTT = 0.1
 
+last_full_resync = Time.now
 busing.listen do |busing_event|
   if busing_event == :no_event
+    if (last_full_resync + full_resync_every) < Time.now
+      full_resync(busing_entities, busing: busing,
+                                   mqtt: mqtt,
+                                   logger: logger,
+                                   bridge_enabled: bridge_enabled)
+      last_full_resync = Time.now
+    end
     do_other_things(mqtt, logger) if bridge_enabled
     next
   end

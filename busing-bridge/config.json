@@ -20,6 +20,7 @@
         "forward_all_events": false,
         "busing_host": null,
         "busing_port": 12347,
+        "full_resync_every": 60,
         "busing_entities": [],
         "busing_devices_installed": 5,
         "busing_device_configuration": [],
@@ -37,6 +38,7 @@
         "forward_all_events": "bool?",
         "busing_host": "str",
         "busing_port": "int?",
+        "full_resync_every": "int?",
         "busing_entities": [
             "str"
         ],
