@@ -58,15 +58,6 @@ def publish_entity_state(mqtt, logger, entity, state, raw = nil)
   mqtt.publish("busing/#{entity}/status", message.to_json)
 end
 
-busing_device_configurations.each do |options|
-  logger.info("Configuring '#{options["type"]}' with '#{options.inspect}'")
-  busing.configure_device(
-    options["type"],
-    outputs: options["outputs"],
-    inputs: options["inputs"]
-  )
-end
-
 busing_entities.each do |entity|
   state = busing.output_state_by(name: entity)
   publish_entity_state(mqtt, logger, entity, state) if bridge_enabled
@@ -86,6 +77,15 @@ def do_other_things(mqtt, logger)
 rescue Timeout::Error
   logger.debug("MQTT: no new messages")
   sleep WAITING_TIME_FOR_MQTT
+end
+
+busing_device_configurations.each do |options|
+  logger.info("Configuring '#{options["type"]}' with '#{options.inspect}'")
+  busing.configure_device(
+    options["type"],
+    outputs: options["outputs"],
+    inputs: options["inputs"]
+  )
 end
 
 busing.listen do |busing_event|
