@@ -58,10 +58,12 @@ def publish_entity_state(mqtt, logger, entity, state, raw = nil)
   mqtt.publish("busing/#{entity}/status", message.to_json)
 end
 
-busing_entities.each do |entity|
-  state = busing.output_state_by(name: entity)
-  publish_entity_state(mqtt, logger, entity, state) if bridge_enabled
-  logger.info("Busing #{entity} are '#{state}'")  
+def full_resync(busing_entities, busing:, mqtt:, logger:, bridge_enabled: true)
+  busing_entities.each do |entity|
+    state = busing.output_state_by(name: entity)
+    publish_entity_state(mqtt, logger, entity, state) if bridge_enabled
+    logger.info("Busing #{entity} are '#{state}'")  
+  end
 end
 
 def do_other_things(mqtt, logger)
@@ -85,6 +87,8 @@ busing_device_configurations.each do |options|
     inputs: options["inputs"]
   )
 end
+
+full_resync(busing_entities, busing: busing, mqtt: mqtt, logger: logger, bridge_enabled: bridge_enabled)
 
 WAITING_TIME_FOR_MQTT = 0.1
 
