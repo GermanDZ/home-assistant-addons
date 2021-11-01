@@ -17,9 +17,6 @@ busing_device_configurations = options.fetch("busing_device_configuration")
 devices_installed = options.fetch("busing_devices_installed", 12)
 forward_all_events = options.fetch("forward_all_events", false)
 
-puts "==="*20
-puts ENV.inspect
-puts "==="*20
 mqtt_options = ENV.fetch("MQTT_HOST", false) ? ENV : options.fetch("mqtt_config")
 
 mqtt_host = mqtt_options.fetch("MQTT_HOST")
