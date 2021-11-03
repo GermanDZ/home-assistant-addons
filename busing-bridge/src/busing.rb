@@ -120,6 +120,11 @@ class Busing
     device[:controller].output_state_by(name: name)
   end
 
+  def set_state_by(name:, value:)
+    device = devices.find { |device| device[:controller].output_names.include?(name) }
+    device[:controller].set_state_by(name: name, value: value)
+  end
+
   def input_state_by(name:)
     device = devices.find { |device| device[:controller].input_names.include?(name) }
     device[:controller].input_state_by(name: name)

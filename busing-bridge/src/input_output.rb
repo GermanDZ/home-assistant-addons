@@ -58,6 +58,14 @@ class InputOutput
     (response.data1 & bit_value) == bit_value ? "ON" : "OFF"
   end
 
+  def set_state_by(name:, value:)
+    output_index = output_names.index(name)
+    bit_mode = value == "ON" ? 0 : 1
+    bit_value = MAX_OUTPUTS - output_names.size + output_index + 8 * bit_mode
+    data1 = 2
+    busing.send_command(Busing::WRITE_MEM, device_type, data1, bit_value)
+  end
+
   def input_state_by(name:)
     response = busing.send_command(Busing::READ_MEM, device_type, 0, 0)
     bit_value = 2 ** (input_names.index(name) + MAX_INPUTS - input_names.size + 2)

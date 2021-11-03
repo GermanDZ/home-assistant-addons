@@ -25,6 +25,10 @@ class KCtr
     @input_out_puts.output_state_by(name: name)
   end
 
+  def set_state_by(name:, value:)
+    @input_out_puts.set_state_by(name: name, value: value)
+  end
+
   def input_names=(names)
     @input_out_puts.input_names = names
   end
