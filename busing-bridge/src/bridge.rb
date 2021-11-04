@@ -76,6 +76,7 @@ def do_other_things(busing_entities, busing:, mqtt:, logger:)
         if topic.start_with? "busing/#{entity}"
           if %w(ON OFF).include?(message)
             busing.set_state_by(name: entity, value: message)
+            publish_entity_state(mqtt, logger, entity, message)
           else
             logger.warn"Wrong message '#{message}' on topic '#{topic}'."
           end
