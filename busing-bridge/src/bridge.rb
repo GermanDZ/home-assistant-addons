@@ -74,11 +74,8 @@ def do_other_things(busing_entities, busing:, mqtt:, logger:)
       topic, message = mqtt.get
       busing_entities.each do |entity|
         if topic.start_with? "busing/#{entity}"
-          case message
-          when "ON"
-            busing.set_state_by(name: entity, value: "ON")
-          when "OFF"
-            busing.set_state_by(name: entity, value: "OFF")
+          if %w(ON OFF).include?(message)
+            busing.set_state_by(name: entity, value: message)
           else
             logger.warn"Wrong message '#{message}' on topic '#{topic}'."
           end
