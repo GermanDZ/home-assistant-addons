@@ -27,7 +27,7 @@ mqtt_username = mqtt_options.fetch("MQTT_USERNAME")
 mqtt_password = mqtt_options.fetch("MQTT_PASSWORD")
 mqtt_protocol = mqtt_ssl ? "mqtts" : "mqtt"
 
-mqtt_topic = options.fetch("mqtt_topic", "busing/events")
+mqtt_topic = options.fetch("mqtt_topic", "busing")
 
 log_level = options.fetch("log_level", Logger::WARN)
 
@@ -43,7 +43,7 @@ mqtt_connection_url = "#{mqtt_protocol}://#{mqtt_username}:#{mqtt_password}@#{mq
 
 mqtt = if bridge_enabled
   MQTT::Client.connect(mqtt_connection_url, port: mqtt_port, ssl: mqtt_ssl).tap do |mqtt|
-    mqtt.subscribe("#")
+    mqtt.subscribe("#{mqtt_topic}#")
   end
 end
 
@@ -129,7 +129,7 @@ busing.listen do |busing_event|
     Value_2: packet.data2,
     Raw: busing_event.inspect
   }
-  mqtt.publish(mqtt_topic, message.to_json) if forward_all_events && bridge_enabled
+  mqtt.publish("#{mqtt_topic}/events", message.to_json) if forward_all_events && bridge_enabled
 
   if busing_event[:action] == "set"
     publish_entity_state(
