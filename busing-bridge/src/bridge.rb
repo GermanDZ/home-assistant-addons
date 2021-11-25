@@ -43,7 +43,7 @@ mqtt_connection_url = "#{mqtt_protocol}://#{mqtt_username}:#{mqtt_password}@#{mq
 
 mqtt = if bridge_enabled
   MQTT::Client.connect(mqtt_connection_url, port: mqtt_port, ssl: mqtt_ssl).tap do |mqtt|
-    mqtt.subscribe("#{mqtt_topic}#")
+    mqtt.subscribe("#{mqtt_topic}/#")
   end
 end
 
