@@ -45,12 +45,6 @@
                 ]
             }
         ],
-        "mqtt_host": "str",
-        "mqtt_port": "int",
-        "mqtt_ssl": "bool",
-        "mqtt_protocol": "str",
-        "mqtt_username": "str",
-        "mqtt_password": "str",
         "mqtt_topic": "str",
         "log_level": "str"
     }
