@@ -24,12 +24,6 @@
         "busing_entities": [],
         "busing_devices_installed": 5,
         "busing_device_configuration": [],
-        "mqtt_host": null,
-        "mqtt_port": 8833,
-        "mqtt_ssl": true,
-        "mqtt_protocol": "mqtts",
-        "mqtt_username": null,
-        "mqtt_password": null,
         "mqtt_topic": "busing/events/",
         "log_level": "info"
     },
