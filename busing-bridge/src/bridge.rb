@@ -9,6 +9,10 @@ require_relative "busing"
 options_path = ENV.fetch("OPTIONS_FILE", "/data/options.json")
 options = JSON.parse(File.read(options_path))
 
+Logger.new(STDOUT).info("opts path: #{options_path}")
+Logger.new(STDOUT).info("opts content: #{options}")
+
+
 bridge_enabled = options.fetch("bridge_enabled", false)
 
 busing_host = options.fetch("busing_host")
@@ -31,6 +35,12 @@ mqtt_topic = options.fetch("mqtt_topic", "busing")
 
 log_level = options.fetch("log_level", Logger::WARN)
 
+mqtt_connection_url = "#{mqtt_protocol}://#{mqtt_username}:#{mqtt_password}@#{mqtt_host}"
+
+Logger.new(STDOUT).info("opts #{options.inspect}")
+Logger.new(STDOUT).info("mqtt #{mqtt_connection_url}")
+
+
 busing = Busing.connect(
   host: busing_host,
   max_devices_to_found:
@@ -39,9 +49,8 @@ busing = Busing.connect(
 )
 logger = busing.logger
 
-mqtt_connection_url = "#{mqtt_protocol}://#{mqtt_username}:#{mqtt_password}@#{mqtt_host}"
-
 mqtt = if bridge_enabled
+
   MQTT::Client.connect(mqtt_connection_url, port: mqtt_port, ssl: mqtt_ssl).tap do |mqtt|
     mqtt.subscribe("#{mqtt_topic}/#")
   end
