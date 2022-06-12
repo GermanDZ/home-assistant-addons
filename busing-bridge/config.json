@@ -12,6 +12,7 @@
     ],
     "startup": "services",
     "boot": "auto",
+    "init": "false",
     "url": "https://github.com/GermanDZ/home-assistant-addons/tree/main/busing-bridge",
     "stage": "experimental",
     "services": ["mqtt:need"],
