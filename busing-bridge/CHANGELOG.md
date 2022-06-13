@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.0.21
 
 * Make the addon compatible with Ruby 3.0
 

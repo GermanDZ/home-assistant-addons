@@ -1,6 +1,6 @@
 {
     "name": "Busing <-> MQTT bridge",
-    "version": "0.0.20-beta-2",
+    "version": "0.0.21",
     "slug": "ingenium_busing_mqtt",
     "description": "Publish Ingenium/Fermax Events into MQTT",
     "arch": [
