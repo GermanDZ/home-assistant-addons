@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Make the addon compatible with Ruby 3.0
+
 ## 0.0.20
 
 * Add `init: false` to config

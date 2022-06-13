@@ -5,6 +5,7 @@ require "json"
 require "mqtt"
 require_relative "packet"
 require_relative "busing"
+require_relative "patch_uri"
 
 options_path = ENV.fetch("OPTIONS_FILE", "/data/options.json")
 options = JSON.parse(File.read(options_path))
