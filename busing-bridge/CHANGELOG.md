@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.22
+
 * Use [mqtt](https://github.com/njh/ruby-mqtt) gem from main branch on github for Ruby 3.0 compat.
 
 ## 0.0.21
