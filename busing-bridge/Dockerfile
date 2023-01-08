@@ -3,7 +3,7 @@ FROM $BUILD_FROM
 
 ENV LANG C.UTF-8
 
-RUN apk add --no-cache ruby ruby-bundler ruby-json
+RUN apk add --no-cache ruby ruby-bundler ruby-json git
 
 RUN mkdir -p /bridge
 WORKDIR /bridge
