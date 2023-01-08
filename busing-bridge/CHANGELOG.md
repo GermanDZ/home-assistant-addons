@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.23
+
 Add missing `git` package to docker image
 
 ## 0.0.22
