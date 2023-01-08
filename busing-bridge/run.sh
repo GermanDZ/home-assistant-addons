@@ -13,4 +13,4 @@ else
     bashio::log.info "Received user: '$MQTT_USERNAME' for MQTT at '$MQTT_HOST:$MQTT_PORT'!"
 fi
 
-ruby bridge.rb
+bundle exec ruby bridge.rb

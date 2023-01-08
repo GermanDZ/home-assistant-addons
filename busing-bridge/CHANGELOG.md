@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+Use bundle exec in `run.sh` to ensure gems are available
+
 ## 0.0.23
 
 Add missing `git` package to docker image
