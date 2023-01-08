@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* Use [mqtt](https://github.com/njh/ruby-mqtt) gem from main branch on github for Ruby 3.0 compat.
+
 ## 0.0.21
 
 * Make the addon compatible with Ruby 3.0
