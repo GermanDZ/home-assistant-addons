@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.24
+
 Use bundle exec in `run.sh` to ensure gems are available
 
 ## 0.0.23
