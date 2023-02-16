@@ -50,8 +50,18 @@ class KCtr
   end
 
   def decode(packet)
-    return @input_out_puts.decode(packet) if packet.data1 == SET_OUTPUT
+    info = {}
 
-    {}
+    if packet.command == Busing::WRITE_MEM && packet.data1 == SET_OUTPUT
+      if (register_config = registers_names.find { |config| config["id"] == packet.data2 })
+        info[:action] = "set"
+        info[:entity] = register_config["entity_name"]
+        info[:state] = "ON"
+      end
+    end
+
+    return @input_out_puts.decode(packet) if info == {}
+
+    info
   end
 end
