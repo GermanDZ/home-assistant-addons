@@ -182,7 +182,7 @@ class Busing
 
     decoded_packet = device[:controller].decode(packet)
 
-    info.merge(decoded_packet)
+    info.merge(decoded_packet, packet: nil).compact
   end
 
   def listen(&block)
@@ -200,7 +200,7 @@ class Busing
                  decode(packet)
                end
           
-        block.call(info)
+        block.call(info, packet)
       end
       logger.info("No more packets, reconnecting...")
       sleep(WAITING_TIME_BEFORE_RECONNECT)
