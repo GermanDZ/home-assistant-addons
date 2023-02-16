@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.25
+
 Emit events when registers are updated in KCTR module.
 
 ## 0.0.24
