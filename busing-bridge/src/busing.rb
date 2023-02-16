@@ -130,12 +130,13 @@ class Busing
     device[:controller].input_state_by(name: name)
   end
 
-  def configure_device(device_type, outputs:, inputs:)
+  def configure_device(device_type, outputs:, inputs:, registers:)
     device = devices.find { |d| d[:node_type] == device_type }
     logger.info("Configuring '#{device_type}'")
     logger.debug("Configuration for '#{device[:controller].class.name}': '#{outputs}'")
     device[:controller].output_names = outputs
     device[:controller].input_names = inputs
+    device[:controller].registers_config = registers
   end
 
   def devices

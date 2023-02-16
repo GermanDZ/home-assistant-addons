@@ -104,7 +104,8 @@ busing_device_configurations.each do |options|
   busing.configure_device(
     options["type"],
     outputs: options["outputs"],
-    inputs: options["inputs"]
+    inputs: options["inputs"],
+    registers: options["registers"]
   )
 end
 

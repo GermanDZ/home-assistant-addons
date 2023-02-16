@@ -41,6 +41,14 @@ class KCtr
     @input_out_puts.input_state_by(name: name)
   end
 
+  def registers_config=(names)
+    @registers_config = names
+  end
+
+  def registers_config
+    @registers_config ||= {}
+  end
+
   def decode(packet)
     return @input_out_puts.decode(packet) if packet.data1 == SET_OUTPUT
 

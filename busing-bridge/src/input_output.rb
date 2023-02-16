@@ -40,6 +40,14 @@ class InputOutput
     @output_names ||= DEFAULT_OUTPUT_NAMES[@type]
   end
 
+  def registers_config=(names)
+    @registers_config = names
+  end
+
+  def registers_config
+    @registers_config ||= {}
+  end
+
   def busing
     @busing
   end
