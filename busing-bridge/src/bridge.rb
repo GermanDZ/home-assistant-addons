@@ -56,7 +56,7 @@ mqtt = if bridge_enabled
   end
 end
 
-def publish_entity_state(mqtt, logger, entity, state, raw_event: nil)
+def publish_entity_state(mqtt, logger, entity, state, mqtt_topic:, raw_event: nil)
   return logger.debug("No entity to publish to mqtt") if entity.to_s == ""
   message = {
     Time: DateTime.now.iso8601,
@@ -65,18 +65,18 @@ def publish_entity_state(mqtt, logger, entity, state, raw_event: nil)
     State: state,
     Raw: raw_event
   }
-  mqtt.publish("busing/#{entity}/status", message.to_json)
+  mqtt.publish("#{mqtt_topic}/#{entity}/status", message.to_json)
 end
 
-def full_resync(busing_entities, busing:, mqtt:, logger:, bridge_enabled: true)
+def full_resync(busing_entities, busing:, mqtt:, logger:, mqtt_topic:, bridge_enabled: true)
   busing_entities.each do |entity|
     state = busing.output_state_by(name: entity)
-    publish_entity_state(mqtt, logger, entity, state) if bridge_enabled
+    publish_entity_state(mqtt, logger, entity, state, mqtt_topic: mqtt_topic) if bridge_enabled
     logger.info("Busing #{entity} are '#{state}'")  
   end
 end
 
-def do_other_things(busing_entities, busing:, mqtt:, logger:)
+def do_other_things(busing_entities, busing:, mqtt:, logger:, mqtt_topic:)
   logger.debug("No busing events")
   Timeout::timeout(WAITING_TIME_FOR_MQTT) do
     loop do
@@ -85,7 +85,7 @@ def do_other_things(busing_entities, busing:, mqtt:, logger:)
         if topic.start_with? "busing/#{entity}"
           if %w(ON OFF).include?(message)
             busing.set_state_by(name: entity, value: message)
-            publish_entity_state(mqtt, logger, entity, message)
+            publish_entity_state(mqtt, logger, entity, message, mqtt_topic: mqtt_topic)
           else
             logger.warn"Wrong message '#{message}' on topic '#{topic}'."
           end
@@ -108,7 +108,7 @@ busing_device_configurations.each do |options|
   )
 end
 
-full_resync(busing_entities, busing: busing, mqtt: mqtt, logger: logger, bridge_enabled: bridge_enabled)
+full_resync(busing_entities, busing: busing, mqtt: mqtt, logger: logger, mqtt_topic: mqtt_topic, bridge_enabled: bridge_enabled)
 
 WAITING_TIME_FOR_MQTT = 0.1
 
@@ -119,10 +119,11 @@ busing.listen do |busing_event, packet|
       full_resync(busing_entities, busing: busing,
                                    mqtt: mqtt,
                                    logger: logger,
+                                   mqtt_topic: mqtt_topic,
                                    bridge_enabled: bridge_enabled)
       last_full_resync = Time.now
     end
-    do_other_things(busing_entities, busing: busing, mqtt: mqtt, logger: logger) if bridge_enabled
+    do_other_things(busing_entities, busing: busing, mqtt: mqtt, logger: logger, mqtt_topic: mqtt_topic) if bridge_enabled
     next
   end
 
@@ -144,6 +145,7 @@ busing.listen do |busing_event, packet|
       logger,
       busing_event[:entity],
       busing_event[:state],
+      mqtt_topic: mqtt_topic,
       raw_event: busing_event
     ) if bridge_enabled
     logger.debug("Event detected: #{busing_event}")
