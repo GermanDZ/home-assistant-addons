@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+Emit events when registers are updated in KCTR module.
+
 ## 0.0.24
 
 Use bundle exec in `run.sh` to ensure gems are available
