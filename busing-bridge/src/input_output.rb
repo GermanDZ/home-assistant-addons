@@ -40,8 +40,8 @@ class InputOutput
     @output_names ||= DEFAULT_OUTPUT_NAMES[@type]
   end
 
-  def registers_config=(names)
-    @registers_config = names
+  def registers_config=(config)
+    @registers_config = config
   end
 
   def registers_config

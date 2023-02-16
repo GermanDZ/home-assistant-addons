@@ -41,8 +41,8 @@ class KCtr
     @input_out_puts.input_state_by(name: name)
   end
 
-  def registers_config=(names)
-    @registers_config = names
+  def registers_config=(config)
+    @registers_config = config
   end
 
   def registers_config
@@ -53,7 +53,7 @@ class KCtr
     info = {}
 
     if packet.command == Busing::WRITE_MEM && packet.data1 == SET_OUTPUT
-      if (register_config = registers_names.find { |config| config["id"] == packet.data2 })
+      if (register_config = registers_config.find { |config| config["id"] == packet.data2.to_s })
         info[:action] = "set"
         info[:entity] = register_config["entity_name"]
         info[:state] = "ON"

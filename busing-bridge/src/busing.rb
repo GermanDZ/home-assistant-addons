@@ -136,7 +136,12 @@ class Busing
     logger.debug("Configuration for '#{device[:controller].class.name}': '#{outputs}'")
     device[:controller].output_names = outputs
     device[:controller].input_names = inputs
-    device[:controller].registers_config = registers
+    if registers
+      device[:controller].registers_config = registers.map do |register_config|
+        id, entity_name = register_config.split(":")
+        { "id" => id, "entity_name" => entity_name}
+      end
+    end
   end
 
   def devices

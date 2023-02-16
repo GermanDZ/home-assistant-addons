@@ -44,10 +44,9 @@
                 "outputs": [
                     "str"
                 ],
-                "registers": [{
-                    "id": "int",
-                    "entity_name": "str"
-                }]
+                "registers": [
+                    "str"
+                ]
             }
         ],
         "mqtt_topic": "str",
