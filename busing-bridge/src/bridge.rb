@@ -22,7 +22,7 @@ devices_installed = options.fetch("busing_devices_installed", 12)
 forward_all_events = options.fetch("forward_all_events", false)
 full_resync_every = options.fetch("full_resync_every", 60)# seconds
 
-mqtt_options = ENV.fetch("MQTT_HOST", false) ? ENV : options.fetch("mqtt_config")
+mqtt_options = options.fetch("mqtt_config", {}).empty? ? ENV : options.fetch("mqtt_config")
 
 mqtt_host = mqtt_options.fetch("MQTT_HOST")
 mqtt_port = mqtt_options.fetch("MQTT_PORT")
@@ -71,6 +71,10 @@ end
 def full_resync(busing_entities, busing:, mqtt:, logger:, mqtt_topic:, bridge_enabled: true)
   busing_entities.each do |entity|
     state = busing.output_state_by(name: entity)
+    if state.nil?
+      logger.warn("Entity '#{entity}' not found in any configured device")
+      next
+    end
     publish_entity_state(mqtt, logger, entity, state, mqtt_topic: mqtt_topic) if bridge_enabled
     logger.info("Busing #{entity} are '#{state}'")  
   end

@@ -1,6 +1,6 @@
 {
     "name": "Busing <-> MQTT bridge",
-    "version": "0.0.25",
+    "version": "0.0.33",
     "slug": "ingenium_busing_mqtt",
     "description": "Publish Ingenium/Fermax Events into MQTT",
     "arch": [
@@ -25,6 +25,13 @@
         "busing_entities": [],
         "busing_devices_installed": 5,
         "busing_device_configuration": [],
+        "mqtt_config": {
+            "MQTT_HOST": null,
+            "MQTT_PORT": 1883,
+            "MQTT_SSL": false,
+            "MQTT_USERNAME": null,
+            "MQTT_PASSWORD": null
+        },
         "mqtt_topic": "busing/events/",
         "log_level": "info"
     },
@@ -45,10 +52,17 @@
                     "str"
                 ],
                 "registers": [
-                    "str"
+                    "str?"
                 ]
             }
         ],
+        "mqtt_config": {
+            "MQTT_HOST": "str",
+            "MQTT_PORT": "int?",
+            "MQTT_SSL": "bool?",
+            "MQTT_USERNAME": "str?",
+            "MQTT_PASSWORD": "password?"
+        },
         "mqtt_topic": "str",
         "log_level": "str"
     }

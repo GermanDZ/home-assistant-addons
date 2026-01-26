@@ -2,6 +2,41 @@
 
 ## Unreleased
 
+## 0.0.33
+
+* Add support for register entities in output_state_by and set_state_by methods
+* Register entities now appear in MQTT with default "OFF" state until events are received
+
+## 0.0.32
+
+* Remove 'inputs' field from busing_device_configuration schema - only 'outputs' and 'registers' are supported
+
+## 0.0.31
+
+* Fix schema syntax for optional 'inputs' and 'registers' fields in busing_device_configuration
+
+## 0.0.30
+
+* Make 'registers' and 'inputs' fields optional in busing_device_configuration schema
+
+## 0.0.29
+
+* Add support for 'registers' field in busing_device_configuration schema
+
+## 0.0.28
+
+* Fix NoMethodError when entities are not found in configured devices - now shows warning and continues
+* Add null checks in busing.rb methods to prevent crashes with missing entities
+
+## 0.0.27
+
+* Fix MQTT configuration priority - custom mqtt_config now takes precedence over environment variables
+
+## 0.0.26
+
+* Extend config schema to include MQTT configuration options
+* Update Dockerfile to use ruby-json-parser
+
 ## 0.0.25
 
 Emit events when registers are updated in KCTR module.
