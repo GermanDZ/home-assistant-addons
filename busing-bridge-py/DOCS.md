@@ -55,7 +55,7 @@ Supported device types: `KCTR_KA`, `2E2S`, `SMART_TOUCH`.
 | Topic | Direction | Payload |
 | --- | --- | --- |
 | `<mqtt_topic>/<entity>/status` | published | JSON with `State` (`ON`/`OFF`), `Time`, `Source`, `Event`, `Raw` |
-| `<mqtt_topic>/<entity>/set` | subscribed | `ON` or `OFF` to switch an output |
+| `<mqtt_topic>/<entity>/set` | subscribed | `ON` or `OFF` to switch an output (bare `<mqtt_topic>/<entity>` is also accepted) |
 | `<mqtt_topic>/bridge/availability` | published (retained) | `online` / `offline` (MQTT last will) |
 | `<mqtt_topic>/events` | published | every decoded bus event (only when `forward_all_events` is on) |
 

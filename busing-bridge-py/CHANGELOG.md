@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.4
+
+* Accept MQTT commands on the whole `<mqtt_topic>` subtree, matching the Ruby
+  add-on. Previously only `<mqtt_topic>/<entity>/set` was honoured, so a Home
+  Assistant entity whose `command_topic` was the bare `<mqtt_topic>/<entity>`
+  (or any other suffix) was silently ignored — reads worked but commands did
+  nothing. The bridge's own published topics (`/status`, `/events`,
+  `/bridge/*`) are filtered out so they can't be mistaken for commands.
+
 ## 0.1.3
 
 * Relax the `log_level` option schema from a fixed lowercase list to a free

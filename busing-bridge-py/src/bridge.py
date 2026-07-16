@@ -77,12 +77,22 @@ def create_mqtt_client(settings, topic_prefix, command_queue):
 
     def on_connect(client, userdata, flags, reason_code, properties=None):
         _LOGGER.info("Connected to MQTT broker (%s)", reason_code)
-        client.subscribe(f"{topic_prefix}/+/set")
+        # Subscribe to the whole subtree (like the Ruby add-on) so a command
+        # published to either "<prefix>/<entity>" or "<prefix>/<entity>/set" is
+        # picked up, whatever convention the Home Assistant entity uses.
+        client.subscribe(f"{topic_prefix}/#")
         client.publish(availability_topic, "online", retain=True)
 
     def on_message(client, userdata, message):
-        entity = message.topic.split("/")[-2]
-        payload = message.payload.decode(errors="replace")
+        # Topic looks like "<prefix>/<entity>" or "<prefix>/<entity>/set". Take
+        # the first segment after the prefix as the entity and ignore the
+        # bridge's own publishes (status/events/availability) so they can't be
+        # mistaken for commands.
+        relative = message.topic[len(topic_prefix):].lstrip("/")
+        entity = relative.split("/")[0] if relative else ""
+        if not entity or entity == "bridge" or relative == "events" or relative.endswith("/status"):
+            return
+        payload = message.payload.decode(errors="replace").strip()
         _LOGGER.debug("MQTT command, topic: '%s', value: '%s'", message.topic, payload)
         command_queue.put((entity, payload))
 
