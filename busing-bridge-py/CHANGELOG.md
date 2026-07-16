@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.2
+
+* Add the missing `build.yaml` so the Supervisor passes a base image into the
+  Dockerfile's `BUILD_FROM` arg. Without it the build failed with
+  `base name ($BUILD_FROM) should not be blank`. Base images are pinned to the
+  official Home Assistant Alpine 3.21 images for every supported architecture.
+
 ## 0.1.1
 
 Robustness fixes from an adversarial review of the rewrite:
