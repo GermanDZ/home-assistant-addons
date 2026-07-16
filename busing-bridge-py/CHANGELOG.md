@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.3
+
+* Relax the `log_level` option schema from a fixed lowercase list to a free
+  string, matching the Ruby add-on so an existing config (e.g. `log_level:
+  INFO`) can be pasted in as-is. The runtime already upper-cases the value and
+  falls back to `warning` for anything unrecognised.
+
 ## 0.1.2
 
 * Add the missing `build.yaml` so the Supervisor passes a base image into the
