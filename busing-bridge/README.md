@@ -2,6 +2,8 @@
 
 Alpha mode!
 
+See [DOCS.md](DOCS.md) for configuration and MQTT topics.
+
 ## Local Debug
 
 Create a config file `busing-bridge/tmp/local.json` like:
@@ -43,11 +45,14 @@ Create a config file `busing-bridge/tmp/local.json` like:
     "MQTT_PASSWORD": "my-super-secret-pass"
   },
   "mqtt_topic": "busing",
-  "log_level": "INFO"
+  "log_level": "info"
 }
 ```
 
-Move to directory `busing-bridge/src` and run locally with:
+Install the dependencies and run locally:
 
-    OPTIONS_FILE=../tmp/local.json bundle exec ruby bridge.rb
-
+```sh
+cd busing-bridge/src
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+OPTIONS_FILE=../tmp/local.json .venv/bin/python bridge.py
+```
