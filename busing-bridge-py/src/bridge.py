@@ -159,7 +159,6 @@ def main():
         busing.configure_device(
             device_config["type"],
             outputs=device_config.get("outputs"),
-            inputs=device_config.get("inputs"),
             registers=device_config.get("registers"),
         )
 

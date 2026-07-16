@@ -151,7 +151,7 @@ class Busing:
             return SmartTouchPlus(busing=self)
         return BaseController(busing=self)
 
-    def configure_device(self, device_type, outputs=None, inputs=None, registers=None):
+    def configure_device(self, device_type, outputs=None, registers=None):
         device = next((d for d in self.devices if d.node_type == device_type), None)
         if device is None:
             self.logger.warning("Cannot configure '%s': no such device discovered", device_type)
@@ -159,8 +159,6 @@ class Busing:
         self.logger.info("Configuring '%s'", device_type)
         if outputs is not None:
             device.controller.output_names = outputs
-        if inputs is not None:
-            device.controller.input_names = inputs
         if registers:
             device.controller.registers_config = [
                 dict(zip(("id", "entity_name"), register.split(":", 1)))
@@ -231,6 +229,12 @@ class Busing:
 
     def decode(self, packet):
         info = {"action": "noop"}
+        # A passively-observed bus write targets the device whose output is
+        # changing, so the relevant device is in `address_to` (not
+        # `address_from`, the switch/source). That device's controller knows
+        # how to map the write to an entity/state. Command ACKs — which are
+        # addressed to BRIDGE_ADDRESS — are consumed in send_command_to_address
+        # and never reach here.
         device = next(
             (d for d in self.devices if d.device_id == packet.address_to), None
         )

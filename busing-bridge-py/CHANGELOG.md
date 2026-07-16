@@ -14,6 +14,8 @@ Robustness fixes from an adversarial review of the rewrite:
   `busing_devices_installed` no longer causes a long startup stall.
 * Leftover discovery ACKs are drained before the per-device type queries, so a
   stale ACK can't be misread as a device type.
+* Drop the unused `inputs` field from the device-configuration handling so the
+  code matches the add-on schema (which does not expose `inputs`).
 
 ## 0.1.0
 
