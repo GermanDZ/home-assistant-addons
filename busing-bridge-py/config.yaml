@@ -1,5 +1,5 @@
 name: Busing <-> MQTT bridge (Python)
-version: 0.1.0
+version: 0.1.1
 slug: ingenium_busing_mqtt_py
 description: Publish Ingenium/Fermax Events into MQTT (Python rewrite, beta)
 url: https://github.com/GermanDZ/home-assistant-addons/tree/main/busing-bridge-py

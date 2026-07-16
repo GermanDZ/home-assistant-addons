@@ -21,7 +21,7 @@ by publishing MQTT commands.
 | `busing_port` | TCP port of the gateway (default `12347`). |
 | `full_resync_every` | Seconds between full state re-publications (default `60`). |
 | `busing_entities` | Names of the outputs to track and publish. |
-| `busing_devices_installed` | Number of devices in the installation; discovery stops after finding this many. |
+| `busing_devices_installed` | Number of devices in the installation; discovery stops as soon as this many are found. Set it to the real device count: if it is higher than the number of devices that actually answer, discovery waits for the bus to go quiet (up to a 30&nbsp;s cap) before continuing. |
 | `busing_device_configuration` | Per-device-type configuration, see below. |
 | `mqtt_config` | Manual MQTT broker settings; leave `MQTT_HOST` empty to use the Supervisor's MQTT service. |
 | `mqtt_topic` | MQTT topic prefix (default `busing`). |

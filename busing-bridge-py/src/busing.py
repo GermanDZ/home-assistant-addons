@@ -24,7 +24,8 @@ class Busing:
 
     PACKET_READ_TIMEOUT = 0.1  # seconds
     RECONNECT_DELAY = 2  # seconds
-    DISCOVERY_TIMEOUT = 30  # seconds
+    DISCOVERY_TIMEOUT = 30  # hard cap on discovery, seconds
+    DISCOVERY_IDLE_TIMEOUT = 3  # stop discovery after this much bus silence, seconds
     COMMAND_TIMEOUT = 5  # seconds
 
     @classmethod
@@ -83,6 +84,11 @@ class Busing:
         data, self._buffer = self._buffer[: Packet.SIZE], self._buffer[Packet.SIZE:]
         return Packet(data)
 
+    def _drain(self):
+        """Discard any packets already queued until the bus goes quiet."""
+        while self.next_packet() is not None:
+            pass
+
     def discover_devices(self, max_devices=255):
         sock = self._socket()
         for address in range(self.MAX_DEVICE_ID + 1):
@@ -93,8 +99,12 @@ class Busing:
         addresses = []
         received = 0
         deadline = time.monotonic() + self.DISCOVERY_TIMEOUT
+        last_activity = time.monotonic()
+        # Collect ACKs until we have every expected device, the bus falls silent
+        # (all present devices have answered), or the hard cap is hit.
         while received < self.MAX_DEVICE_ID and len(addresses) < max_devices:
-            if time.monotonic() > deadline:
+            now = time.monotonic()
+            if now > deadline:
                 self.logger.warning(
                     "Device discovery timed out after %ss with %s device(s) found "
                     "(check 'busing_devices_installed')",
@@ -104,13 +114,20 @@ class Busing:
                 break
             packet = self.next_packet()
             if packet is None:
+                if now - last_activity > self.DISCOVERY_IDLE_TIMEOUT:
+                    break
                 continue
+            last_activity = now
             if packet.address_to != self.BRIDGE_ADDRESS:
                 continue
             received += 1
             if packet.command == 1:
                 addresses.append(packet.address_from)
                 self.logger.debug("New device found at address %s", packet.address_from)
+
+        # Flush any ACKs still queued from the broadcast so they can't be
+        # mistaken for a device-type reply in the per-device queries below.
+        self._drain()
 
         self.devices = []
         for device_id in addresses:
@@ -233,11 +250,10 @@ class Busing:
                 packet = self.next_packet()
             except (ConnectionError, OSError) as err:
                 self.logger.warning("Busing connection lost (%s), reconnecting...", err)
-                time.sleep(self.RECONNECT_DELAY)
-                try:
-                    self.reconnect()
-                except OSError as reconnect_err:
-                    self.logger.error("Reconnect failed: %s", reconnect_err)
+                self._safe_reconnect(delay=self.RECONNECT_DELAY)
+                # Yield so the caller keeps draining queued MQTT commands and
+                # running periodic work while the bus is unreachable.
+                yield None, None
                 continue
 
             if packet is None:
@@ -246,7 +262,17 @@ class Busing:
 
             if not packet.is_valid():
                 self.logger.warning("Invalid packet: %s", packet.describe())
-                self.reconnect()
+                self._safe_reconnect()
+                yield None, None
                 continue
 
             yield self.decode(packet), packet
+
+    def _safe_reconnect(self, delay=0):
+        """Reconnect, swallowing connection errors so the event loop never dies."""
+        if delay:
+            time.sleep(delay)
+        try:
+            self.reconnect()
+        except OSError as err:
+            self.logger.error("Reconnect failed: %s", err)

@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.1
+
+Robustness fixes from an adversarial review of the rewrite:
+
+* The event loop no longer crashes if reconnecting fails after an invalid
+  packet is received (the reconnect is now guarded like the connection-lost
+  path).
+* Queued MQTT commands keep being processed while the Busing bus is
+  unreachable, instead of stalling until it comes back.
+* Device discovery stops as soon as the bus goes quiet (3&nbsp;s) instead of
+  always waiting for the full count/timeout, so an over-estimated
+  `busing_devices_installed` no longer causes a long startup stall.
+* Leftover discovery ACKs are drained before the per-device type queries, so a
+  stale ACK can't be misread as a device type.
+
 ## 0.1.0
 
 Rewrite of the bridge in Python (paho-mqtt), replacing the Ruby implementation.
