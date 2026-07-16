@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.5
+
+* Make `MQTT_HOST` in `mqtt_config` optional (`str?`) so the whole block can be
+  left empty. The DOCS already said an empty host falls back to the Supervisor's
+  MQTT service, but the schema rejected it ("Invalid dict for option
+  'mqtt_config'"). The runtime already handles an empty/omitted host.
+
 ## 0.1.4
 
 * Accept MQTT commands on the whole `<mqtt_topic>` subtree, matching the Ruby
