@@ -1,6 +1,35 @@
 # Changelog
 
-## Unreleased
+## 0.1.0
+
+Rewrite of the bridge in Python (paho-mqtt), replacing the Ruby implementation.
+
+Behaviour fixes and improvements:
+
+* **Breaking:** commands are now received on `<mqtt_topic>/<entity>/set` (Home
+  Assistant `command_topic` convention) instead of any topic starting with
+  `busing/<entity>`. This also stops the bridge from consuming its own
+  `status` messages.
+* Add-on configuration migrated from `config.json` to `config.yaml` (current
+  Home Assistant format); `log_level` is now a select of
+  `debug|info|warning|error`.
+* MQTT credentials are no longer written to the add-on log.
+* The `busing_port` option is now actually used (it was previously ignored and
+  the port was always 12347).
+* Trailing `/` in `mqtt_topic` is stripped, avoiding double slashes in topics.
+* The bridge publishes `online`/`offline` (retained, with MQTT last will) to
+  `<mqtt_topic>/bridge/availability`.
+* Device discovery and command responses now time out instead of hanging
+  forever when a device does not answer.
+* Manual `mqtt_config` is only used when `MQTT_HOST` is set, otherwise the
+  Supervisor's MQTT service is used; the add-on no longer exits when the
+  Mosquitto service is missing but `mqtt_config` is provided.
+* Unknown device types get a no-op controller instead of crashing the add-on.
+* Partial TCP reads no longer desynchronize the 9-byte packet framing.
+
+---
+
+History below is inherited from the original Ruby `busing-bridge` add-on.
 
 ## 0.0.33
 

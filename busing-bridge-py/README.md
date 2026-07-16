@@ -1,10 +1,14 @@
-# Busing (Fermax/Ingenium) bridge to MQTT
+# Busing (Fermax/Ingenium) bridge to MQTT — Python
 
-Alpha mode!
+Beta rewrite of the `busing-bridge` add-on in Python. It ships with its own
+slug (`ingenium_busing_mqtt_py`) so it can be installed **alongside** the
+original Ruby add-on for testing.
+
+See [DOCS.md](DOCS.md) for configuration and MQTT topics.
 
 ## Local Debug
 
-Create a config file `busing-bridge/tmp/local.json` like:
+Create a config file `busing-bridge-py/tmp/local.json` like:
 
 ```json
 {
@@ -43,11 +47,14 @@ Create a config file `busing-bridge/tmp/local.json` like:
     "MQTT_PASSWORD": "my-super-secret-pass"
   },
   "mqtt_topic": "busing",
-  "log_level": "INFO"
+  "log_level": "info"
 }
 ```
 
-Move to directory `busing-bridge/src` and run locally with:
+Install the dependencies and run locally:
 
-    OPTIONS_FILE=../tmp/local.json bundle exec ruby bridge.rb
-
+```sh
+cd busing-bridge-py/src
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+OPTIONS_FILE=../tmp/local.json .venv/bin/python bridge.py
+```
