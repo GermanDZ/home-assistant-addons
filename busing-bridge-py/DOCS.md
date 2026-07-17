@@ -25,6 +25,8 @@ by publishing MQTT commands.
 | `busing_device_configuration` | Per-device-type configuration, see below. |
 | `mqtt_config` | Manual MQTT broker settings; leave `MQTT_HOST` empty to use the Supervisor's MQTT service. |
 | `mqtt_topic` | MQTT topic prefix (default `busing`). |
+| `mqtt_discovery` | Publish Home Assistant MQTT Discovery so entities appear automatically (default `true`). |
+| `mqtt_discovery_prefix` | Discovery topic prefix (default `homeassistant`; match your MQTT integration if you changed it). |
 | `log_level` | One of `debug`, `info`, `warning`, `error`. |
 
 ### Device configuration
@@ -50,6 +52,23 @@ busing_device_configuration:
 
 Supported device types: `KCTR_KA`, `2E2S`, `SMART_TOUCH`.
 
+## Home Assistant MQTT Discovery
+
+With `mqtt_discovery` enabled (the default), each entity in `busing_entities`
+is announced to Home Assistant automatically — no manual YAML needed. They are
+grouped under a single **Busing bridge** device:
+
+- Switchable outputs become **switch** entities (with command + state).
+- Read-only entities — memory registers and the Smart Touch presence detector —
+  become **binary_sensor** entities.
+
+Discovery configs are published retained and re-announced whenever the bridge
+reconnects to the broker, so entities survive a broker restart. If you remove
+an entity from the config, clear its retained discovery topic (or delete the
+device in Home Assistant) to make it disappear.
+
+The manual `mqtt` YAML below is only needed if you set `mqtt_discovery: false`.
+
 ## MQTT topics
 
 | Topic | Direction | Payload |
@@ -59,7 +78,7 @@ Supported device types: `KCTR_KA`, `2E2S`, `SMART_TOUCH`.
 | `<mqtt_topic>/bridge/availability` | published (retained) | `online` / `offline` (MQTT last will) |
 | `<mqtt_topic>/events` | published | every decoded bus event (only when `forward_all_events` is on) |
 
-### Example Home Assistant MQTT switch
+### Example Home Assistant MQTT switch (only if `mqtt_discovery: false`)
 
 ```yaml
 mqtt:

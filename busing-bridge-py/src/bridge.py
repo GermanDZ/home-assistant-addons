@@ -5,6 +5,7 @@ import json
 import logging
 import os
 import queue
+import re
 import sys
 import time
 from datetime import datetime
@@ -59,7 +60,7 @@ def mqtt_settings(options):
     }
 
 
-def create_mqtt_client(settings, topic_prefix, command_queue):
+def create_mqtt_client(settings, topic_prefix, command_queue, discovery_messages=None):
     _LOGGER.info(
         "Connecting to MQTT broker at %s:%s (ssl=%s, user=%s)",
         settings["host"],
@@ -82,6 +83,12 @@ def create_mqtt_client(settings, topic_prefix, command_queue):
         # picked up, whatever convention the Home Assistant entity uses.
         client.subscribe(f"{topic_prefix}/#")
         client.publish(availability_topic, "online", retain=True)
+        # Re-announce discovery on every (re)connect so entities survive a
+        # broker restart that dropped retained messages.
+        for topic, payload in discovery_messages or []:
+            client.publish(topic, payload, retain=True)
+        if discovery_messages:
+            _LOGGER.info("Published MQTT discovery for %s entities", len(discovery_messages))
 
     def on_message(client, userdata, message):
         # Topic looks like "<prefix>/<entity>" or "<prefix>/<entity>/set". Take
@@ -101,6 +108,52 @@ def create_mqtt_client(settings, topic_prefix, command_queue):
     client.connect(settings["host"], settings["port"])
     client.loop_start()  # network I/O runs in a background thread
     return client
+
+
+def _discovery_object_id(entity):
+    """Sanitize an entity name into an MQTT-discovery object id ([a-zA-Z0-9_-])."""
+    return re.sub(r"[^a-zA-Z0-9_-]", "_", entity)
+
+
+def build_discovery_messages(busing, entities, topic_prefix, discovery_prefix):
+    """Build retained MQTT Discovery config messages so entities appear in HA.
+
+    Switchable outputs are announced as `switch`, everything else (read-only
+    registers, the Smart Touch presence detector) as `binary_sensor`. Returns a
+    list of (topic, payload) tuples to publish retained.
+    """
+    device = {
+        "identifiers": ["busing_bridge"],
+        "name": "Busing bridge",
+        "manufacturer": "Ingenium / Fermax",
+        "model": "Busing",
+    }
+    availability_topic = f"{topic_prefix}/bridge/availability"
+    messages = []
+    for entity in entities:
+        object_id = _discovery_object_id(entity)
+        config = {
+            "name": entity,
+            "unique_id": f"busing_{object_id}",
+            "state_topic": f"{topic_prefix}/{entity}/status",
+            "value_template": "{{ value_json.State }}",
+            "payload_on": "ON",
+            "payload_off": "OFF",
+            "availability_topic": availability_topic,
+            "payload_available": "online",
+            "payload_not_available": "offline",
+            "device": device,
+        }
+        if busing.is_output(entity):
+            component = "switch"
+            config["command_topic"] = f"{topic_prefix}/{entity}/set"
+            config["state_on"] = "ON"
+            config["state_off"] = "OFF"
+        else:
+            component = "binary_sensor"
+        topic = f"{discovery_prefix}/{component}/busing_{object_id}/config"
+        messages.append((topic, json.dumps(config)))
+    return messages
 
 
 def publish_entity_state(mqtt_client, entity, state, topic_prefix, raw_event=None):
@@ -175,7 +228,15 @@ def main():
     command_queue = queue.Queue()
     mqtt_client = None
     if bridge_enabled:
-        mqtt_client = create_mqtt_client(mqtt_settings(options), topic_prefix, command_queue)
+        discovery_messages = None
+        if options.get("mqtt_discovery", True):
+            discovery_prefix = options.get("mqtt_discovery_prefix", "homeassistant").rstrip("/")
+            discovery_messages = build_discovery_messages(
+                busing, entities, topic_prefix, discovery_prefix
+            )
+        mqtt_client = create_mqtt_client(
+            mqtt_settings(options), topic_prefix, command_queue, discovery_messages
+        )
 
     full_resync(entities, busing, mqtt_client, topic_prefix, bridge_enabled)
     last_resync = time.monotonic()

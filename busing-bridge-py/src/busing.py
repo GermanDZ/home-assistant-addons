@@ -165,6 +165,10 @@ class Busing:
                 for register in registers
             ]
 
+    def is_output(self, name):
+        """True if `name` is a switchable output (vs. a read-only register/sensor)."""
+        return any(name in d.controller.output_names for d in self.devices)
+
     def output_state_by(self, name):
         device = next(
             (d for d in self.devices if name in d.controller.output_names), None

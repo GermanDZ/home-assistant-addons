@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.0
+
+* Add Home Assistant MQTT Discovery (`mqtt_discovery`, on by default). Each
+  entity in `busing_entities` is now announced automatically and grouped under
+  a single **Busing bridge** device — no manual `mqtt:` YAML required.
+  Switchable outputs are published as `switch` entities; read-only entities
+  (memory registers and the Smart Touch presence detector) as `binary_sensor`.
+* Discovery configs are retained and re-announced on every broker reconnect, so
+  entities survive a broker restart.
+* New options: `mqtt_discovery` (bool, default `true`) and
+  `mqtt_discovery_prefix` (default `homeassistant`).
+
 ## 0.1.5
 
 * Make `MQTT_HOST` in `mqtt_config` optional (`str?`) so the whole block can be
