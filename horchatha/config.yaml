@@ -1,5 +1,5 @@
 name: HorchatHA
-version: 0.1.0
+version: 0.2.0
 slug: horchatha
 description: Bring a cloud video intercom into Home Assistant (rings, live video, photos, doors)
 url: https://github.com/GermanDZ/home-assistant-addons/tree/main/horchatha
@@ -37,7 +37,6 @@ options:
   app_package: null
   app_version: null
   app_build: null
-  account_username: null
   accept_language: es-ES
   door_entity: button
   live_video: false
@@ -65,7 +64,7 @@ schema:
   app_os: str?
   app_os_version: str?
   # Account
-  account_username: email
+  account_username: email?
   account_password: password?
   # MQTT: empty uses the Mosquitto app's details from the Supervisor.
   mqtt_host: str?

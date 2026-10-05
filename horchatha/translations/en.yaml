@@ -46,7 +46,7 @@ configuration:
     name: Client OS version
   account_username:
     name: Account email
-    description: The intercom account's email. The sign-in link is sent here.
+    description: Optional. The Intercom panel asks for it when you sign in and remembers it; set here, it is only the default.
   account_password:
     name: Account password
     description: Optional. Leave empty and sign in from the Intercom panel instead; then no password is stored.
