@@ -12,3 +12,4 @@ This repository contains my peronal, but free to use [Home Assistant Add-ons](ht
 ## Add-ons
 
 * [Busing Bridge (Fermax/Ingenium)](busing-bridge/README.md)
+* [HorchatHA](horchatha/README.md): a cloud video intercom in Home Assistant

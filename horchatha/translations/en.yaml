@@ -1,0 +1,114 @@
+configuration:
+  oauth_base:
+    name: OAuth base URL
+    description: The provider's OAuth server, no trailing slash.
+  api_base:
+    name: API base URL
+    description: The provider's REST API, no trailing slash.
+  signaling_base:
+    name: Signaling base URL
+    description: Default call signaling server. Each ring brings its own; leave empty unless told otherwise.
+  signaling_domain:
+    name: Signaling domain
+    description: Only call servers in this domain are joined (they receive the OAuth token). Empty takes it from the signaling base URL.
+  oauth_client_id:
+    name: OAuth client id
+    description: The provider mobile app's OAuth client id.
+  oauth_client_secret:
+    name: OAuth client secret
+    description: The provider mobile app's OAuth client secret.
+  oauth_redirect_uri:
+    name: OAuth redirect URI
+    description: The app's registered sign-in redirect, a deep link such as <scheme>://<host>/magic-link.
+  push_sender_id:
+    name: Push sender id
+  push_app_id:
+    name: Push app id
+  push_api_key:
+    name: Push API key
+  push_project_id:
+    name: Push project id
+  app_package:
+    name: App package
+    description: The provider mobile app's package name.
+  app_version:
+    name: App version
+    description: The provider mobile app's version, as the API expects it.
+  app_build:
+    name: App build
+  accept_language:
+    name: Language
+    description: Language for API responses and the sign-in email (BCP 47, e.g. es-ES).
+  app_os:
+    name: Client OS
+    description: OS name sent when registering for rings. Default Android.
+  app_os_version:
+    name: Client OS version
+  account_username:
+    name: Account email
+    description: The intercom account's email. The sign-in link is sent here.
+  account_password:
+    name: Account password
+    description: Optional. Leave empty and sign in from the Intercom panel instead; then no password is stored.
+  mqtt_host:
+    name: MQTT broker host
+    description: Empty uses the Mosquitto app.
+  mqtt_port:
+    name: MQTT broker port
+  mqtt_tls:
+    name: MQTT over TLS
+  mqtt_user:
+    name: MQTT login
+    description: Empty uses the Mosquitto app's login for apps. Set one of your own to restrict it with an ACL.
+  mqtt_password:
+    name: MQTT password
+  door_names:
+    name: Door names
+    description: "KEY=Name pairs, comma-separated, e.g. ZERO=Street,GENERAL=Garden. Names the door entities."
+  opener_names:
+    name: Who opened
+    description: "email=Name pairs, comma-separated. Names people in Door opened events; anyone else shows as other."
+  door_entity:
+    name: Door entity
+    description: button (one press opens) or lock (Home Assistant asks for confirmation).
+  history_interval_default:
+    name: Open history interval
+    description: Minutes between door-open history polls, first value only (then a number entity owns it).
+  live_video:
+    name: Live video
+    description: Join calls and publish the panel camera into go2rtc. Off means no call is ever joined.
+  live_video_default:
+    name: Live video switch default
+    description: The per-home Live video switch on first start only.
+  preview_default:
+    name: Camera preview switch default
+    description: The per-home Camera preview switch on first start only. People at the door see the camera turn on.
+  preview_doors:
+    name: Camera buttons
+    description: Door keys that get a Show camera button, comma-separated. Empty means every door.
+  go2rtc_rtsp_url:
+    name: go2rtc RTSP URL
+    description: Where live video is published, as panel_<device>. The go2rtc app on this host is rtsp://172.30.32.1:8554.
+  go2rtc_rtsp_user:
+    name: go2rtc RTSP user
+  go2rtc_rtsp_password:
+    name: go2rtc RTSP password
+  archive_days:
+    name: Keep photos (days)
+    description: Visitor photos are kept under /media/horchatha.
+  photo_match_window:
+    name: Photo match window (s)
+    description: How far a photo's time may be from its ring and still count as that ring's.
+  ack_mode:
+    name: Acknowledge rings
+    description: none (default, phones ring as usual), received or attended.
+  bridge_api_token:
+    name: Door API token
+    description: Bearer token for the door-open API on port 8080, 32+ characters. Empty makes one that nobody knows.
+  dry_run:
+    name: Dry run
+    description: Log door opens, rejects and camera starts instead of doing them.
+  log_level:
+    name: Log level
+network:
+  8080/tcp: Door-open API for the LAN (bearer token). Off unless you map it.
