@@ -42,16 +42,19 @@ One device per home (installation), with:
 1. Add this repository to the app store: **Settings → Apps → App store → ⋮ →
    Repositories**, `https://github.com/GermanDZ/home-assistant-addons`.
 2. Install **HorchatHA**.
-3. On the **Configuration** tab fill in the provider settings and your account
-   email. Leave **Account password** empty.
+3. On the **Configuration** tab fill in the provider settings. Leave
+   **Account email** and **Account password** empty: the panel asks for the
+   email when you sign in.
 4. Start it. The **Intercom** panel appears in the sidebar.
 
 ## Sign in
 
 Open **Intercom** in the sidebar (admins only):
 
-1. **Email me a link.** The provider emails a one-time sign-in link to the
-   account, valid for about 10 minutes.
+1. Enter the intercom account's email and press **Email me a link.** The
+   provider emails a one-time sign-in link to it, valid for about 10 minutes.
+   HorchatHA remembers the email you signed in with (shown masked); leave the
+   field empty next time to use it again.
 2. In the email, **copy the link without opening it**: opening it spends it.
    Paste it and press **Sign in**. If you already opened it, paste the address
    the browser ended on, or its code.
